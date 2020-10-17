@@ -22,4 +22,9 @@ public class MinecraftAsset {
 	public long getSize() {
 		return this.size;
 	}
+	
+	@Override
+	public String toString() {
+		return "{" + this.hash + ": " + this.key + ", s=" + this.size + "}";
+	}
 }
