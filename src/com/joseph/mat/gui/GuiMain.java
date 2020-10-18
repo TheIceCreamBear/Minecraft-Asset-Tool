@@ -14,7 +14,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -86,7 +85,7 @@ public class GuiMain {
 		initialMap.put("root", map);
 		DefaultMutableTreeNode root = createTreeForMap(null, initialMap);
 		
-		JTree tree = new JTree(new DefaultTreeModel(root, false));
+		JCheckBoxTree tree = new JCheckBoxTree(new DefaultTreeModel(root, false));
 		
 		JScrollPane pane = new JScrollPane(tree);
 		
