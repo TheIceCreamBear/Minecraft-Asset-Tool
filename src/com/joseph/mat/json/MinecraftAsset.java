@@ -23,8 +23,11 @@ public class MinecraftAsset {
 		return this.size;
 	}
 	
-	@Override
-	public String toString() {
+	public String toTestString() {
 		return "{" + this.hash + ": " + this.key + ", s=" + this.size + "}";
+	}
+	
+	public String toString() {
+		return this.key.substring(this.key.lastIndexOf('/') + 1);
 	}
 }
