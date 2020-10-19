@@ -25,7 +25,7 @@ public class MinecraftIndexParser {
 			reader.nextName(); // hash
 			String hash = reader.nextString();
 			reader.nextName(); // size
-			long size = reader.nextLong();
+			int size = reader.nextInt();
 			MinecraftAsset ma = new MinecraftAsset(name, hash, size);
 			map.put(name, ma);
 			reader.endObject();
