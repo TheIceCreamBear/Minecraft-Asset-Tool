@@ -3,9 +3,9 @@ package com.joseph.mat.json;
 public class MinecraftAsset {
 	private String key;
 	private String hash;
-	private long size;
+	private int size;
 	
-	public MinecraftAsset(String key, String hash, long size) {
+	public MinecraftAsset(String key, String hash, int size) {
 		this.key = key;
 		this.hash = hash;
 		this.size = size;
@@ -19,7 +19,7 @@ public class MinecraftAsset {
 		return this.key;
 	}
 	
-	public long getSize() {
+	public int getSize() {
 		return this.size;
 	}
 	
