@@ -10,10 +10,13 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -26,6 +29,12 @@ public class GuiMain {
 	private JComboBox<String> selector;
 	private JPanel currentPanel;
 	private HashMap<String, JPanel> versionToPanel;
+	private HashMap<String, JCheckBoxTree> versionToTree;
+	
+	private JPanel southPanel;
+	private JButton browseButton;
+	private JTextField saveFolder;
+	private JButton transferButton;
 	
 	public GuiMain(LoadingDialog ld, int progress, HashMap<File, HashMap<String, MinecraftAsset>> map) {
 		this.frame = new JFrame("Minecraft Asset Tool");
@@ -36,12 +45,15 @@ public class GuiMain {
 		this.frame.setMinimumSize(new Dimension(800, 600));
 
 		this.versionToPanel = new HashMap<String, JPanel>();
+		this.versionToTree = new HashMap<String, JCheckBoxTree>();
 		int i = 0;
 		int size = map.keySet().size();
 		for (File f : map.keySet()) {
 			ld.updateProgressBar(progress++, "Creating GUI panels: " + (i + 1) + "/" + size);
-			Pair<String, JPanel> pair = this.createPanelForAssets(f, map.get(f));
-			this.versionToPanel.put(pair.getKey(), pair.getValue());
+			Pair<String, Pair<JPanel, JCheckBoxTree>> stringToPair = this.createPanelForAssets(f, map.get(f));
+			Pair<JPanel, JCheckBoxTree> pair = stringToPair.getValue();
+			this.versionToPanel.put(stringToPair.getKey(), pair.getKey());
+			this.versionToTree.put(stringToPair.getKey(), pair.getValue());
 			i++;
 		}
 		
@@ -58,11 +70,47 @@ public class GuiMain {
 			}
 		});
 		
+		this.browseButton = new JButton("Browse");
+		this.browseButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int result = chooser.showOpenDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					String file = chooser.getSelectedFile().getAbsolutePath();
+					GuiMain.this.saveFolder.setText(file);
+				}
+			}
+		});
+		
+		this.saveFolder = new JTextField();
+		this.saveFolder.setEditable(false);
+		this.saveFolder.setToolTipText("The location that your files will be saved to");
+		
+		this.transferButton = new JButton("Save Selected");
+		this.transferButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Transer putton pushed");
+				String selectedVersion = (String) GuiMain.this.selector.getSelectedItem();
+				MinecraftAsset[] assets = GuiMain.this.getSelectedAssets(GuiMain.this.versionToTree.get(selectedVersion));
+				// for now and testing purposes
+				System.out.println(Arrays.toString(assets));
+			}
+		});
+		
+		this.southPanel = new JPanel(new BorderLayout());
+		this.southPanel.add(browseButton, BorderLayout.WEST);
+		this.southPanel.add(saveFolder, BorderLayout.CENTER);
+		this.southPanel.add(transferButton, BorderLayout.EAST);
+		
 		this.currentPanel = this.versionToPanel.get(versions[versions.length - 1]);
 		this.selector.setSelectedIndex(versions.length - 1);
 		
 		this.frame.add(selector, BorderLayout.NORTH);
 		this.frame.add(currentPanel, BorderLayout.CENTER);
+		this.frame.add(southPanel, BorderLayout.SOUTH);
 		
 		ld.closeFrame();
 		
@@ -70,14 +118,25 @@ public class GuiMain {
 		this.frame.pack();
 	}
 	
+	private MinecraftAsset[] getSelectedAssets(JCheckBoxTree tree) {
+		DefaultMutableTreeNode[] paths = tree.getCheckedLeafNodes();
+		MinecraftAsset[] assets = new MinecraftAsset[paths.length];
+		
+		for (int i = 0; i < paths.length; i++) {
+			assets[i] = (MinecraftAsset) paths[i].getUserObject();
+		}
+		
+		return assets;
+	}
+	
 	private void updateCurrentPanel(String newSelected) {
-		this.frame.remove(currentPanel);;
+		this.frame.remove(currentPanel);
 		this.currentPanel = this.versionToPanel.get(newSelected);
 		this.frame.add(currentPanel);
 		this.frame.pack();
 	}
 	
-	private Pair<String, JPanel> createPanelForAssets(File file, HashMap<String, MinecraftAsset> map) {
+	private Pair<String, Pair<JPanel, JCheckBoxTree>> createPanelForAssets(File file, HashMap<String, MinecraftAsset> map) {
 		JPanel panel = new JPanel(new GridLayout(1, 1));
 		
 		// creates the tree associated with the passed in map
@@ -93,7 +152,7 @@ public class GuiMain {
 		
 		String[] temp = file.getAbsolutePath().split("\\/|\\\\");
 		String version = temp[temp.length - 1];
-		return new Pair<String, JPanel>(version, panel);
+		return new Pair<String, Pair<JPanel, JCheckBoxTree>>(version, new Pair<JPanel, JCheckBoxTree>(panel, tree));
 	}
 	
 	private DefaultMutableTreeNode createTreeForMap(DefaultMutableTreeNode node, HashMap<String, HashMap<String, MinecraftAsset>> map) {
