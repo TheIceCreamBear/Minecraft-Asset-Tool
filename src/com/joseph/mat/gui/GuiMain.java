@@ -14,12 +14,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import com.joseph.mat.Main;
 import com.joseph.mat.json.MinecraftAsset;
 
 import javafx.util.Pair;
@@ -92,11 +94,20 @@ public class GuiMain {
 		this.transferButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Transer putton pushed");
+				String saveDestination = GuiMain.this.saveFolder.getText();
+				if (saveDestination.equals("")) {
+					JOptionPane.showMessageDialog(null, "Please make sure to set a destination folder by clicking browse");
+					return;
+				}
+				
 				String selectedVersion = (String) GuiMain.this.selector.getSelectedItem();
-				MinecraftAsset[] assets = GuiMain.this.getSelectedAssets(GuiMain.this.versionToTree.get(selectedVersion));
-				// for now and testing purposes
-				System.out.println(Arrays.toString(assets));
+				final MinecraftAsset[] assets = GuiMain.this.getSelectedAssets(GuiMain.this.versionToTree.get(selectedVersion));
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Main.convertSelectedMinecraftAssets(assets, saveDestination);
+					}
+				}).start();
 			}
 		});
 		
