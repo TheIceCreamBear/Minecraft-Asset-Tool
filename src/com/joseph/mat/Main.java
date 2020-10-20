@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -27,9 +26,6 @@ public class Main {
 			JOptionPane.showMessageDialog(null, "This program does not currently support macOS");
 			// TODO make sure this works on macOS (OSX) and Linux distros
 		}
-		if ((System.getProperty("os.name").contains("Windows") || System.getProperty("os.name").contains("windows"))) {
-			System.setProperty("user.home", System.getProperty("user.home") + File.separator + "AppData" + File.separator + "Roaming");
-		}
 		try {
 			// Make the LaF of Swing the System LaF
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -40,9 +36,6 @@ public class Main {
 		
 		File[] indexFiles = new File(Reference.MINECRAFT_ASSETS_INDEX_DIR).listFiles();
 		HashMap<File, HashMap<String, MinecraftAsset>> fileToParseMap = new HashMap<File, HashMap<String, MinecraftAsset>>();
-		
-		System.out.println(Reference.MINECRAFT_ASSETS_INDEX_DIR);
-		System.out.println(Arrays.toString(indexFiles));
 		
 		int maxLoadingProgress = 2 * indexFiles.length + 1;
 		int progress = 0;
