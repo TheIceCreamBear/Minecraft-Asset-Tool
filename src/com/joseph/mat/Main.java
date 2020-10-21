@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.channels.FileChannel;
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -22,10 +21,7 @@ import com.joseph.mat.reference.Reference;
 
 public class Main {
 	public static void main(String[] args) {
-		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-			JOptionPane.showMessageDialog(null, "This program does not currently support macOS");
-			// TODO make sure this works on macOS (OSX) and Linux distros
-		}
+		// TODO make sure this works on Linux distros
 		try {
 			// Make the LaF of Swing the System LaF
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
