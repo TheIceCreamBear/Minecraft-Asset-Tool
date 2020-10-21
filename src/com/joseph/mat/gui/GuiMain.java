@@ -22,9 +22,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.joseph.mat.Main;
+import com.joseph.mat.Pair;
 import com.joseph.mat.json.MinecraftAsset;
-
-import javafx.util.Pair;
 
 public class GuiMain {
 	private JFrame frame;
