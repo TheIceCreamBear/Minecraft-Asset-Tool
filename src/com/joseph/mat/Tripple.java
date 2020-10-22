@@ -1,4 +1,4 @@
-package com.joseph.mat.reference;
+package com.joseph.mat;
 
 public class Tripple<A, B, C> {
 	private A a;

@@ -22,8 +22,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.joseph.mat.Main;
+import com.joseph.mat.Tripple;
 import com.joseph.mat.json.MinecraftAsset;
-import com.joseph.mat.reference.Tripple;
 
 public class GuiMain {
 	private JFrame frame;
