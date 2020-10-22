@@ -22,8 +22,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.joseph.mat.Main;
-import com.joseph.mat.Pair;
 import com.joseph.mat.json.MinecraftAsset;
+import com.joseph.mat.reference.Tripple;
 
 public class GuiMain {
 	private JFrame frame;
@@ -51,10 +51,9 @@ public class GuiMain {
 		int size = map.keySet().size();
 		for (File f : map.keySet()) {
 			ld.updateProgressBar(progress++, "Creating GUI panels: " + (i + 1) + "/" + size);
-			Pair<String, Pair<JPanel, JCheckBoxTree>> stringToPair = this.createPanelForAssets(f, map.get(f));
-			Pair<JPanel, JCheckBoxTree> pair = stringToPair.getValue();
-			this.versionToPanel.put(stringToPair.getKey(), pair.getKey());
-			this.versionToTree.put(stringToPair.getKey(), pair.getValue());
+			Tripple<String, JPanel, JCheckBoxTree> tripple = this.createPanelForAssets(f, map.get(f));
+			this.versionToPanel.put(tripple.getA(), tripple.getB());
+			this.versionToTree.put(tripple.getA(), tripple.getC());
 			i++;
 		}
 		
@@ -146,7 +145,7 @@ public class GuiMain {
 		this.frame.pack();
 	}
 	
-	private Pair<String, Pair<JPanel, JCheckBoxTree>> createPanelForAssets(File file, HashMap<String, MinecraftAsset> map) {
+	private Tripple<String, JPanel, JCheckBoxTree> createPanelForAssets(File file, HashMap<String, MinecraftAsset> map) {
 		JPanel panel = new JPanel(new GridLayout(1, 1));
 		
 		// creates the tree associated with the passed in map
@@ -162,7 +161,7 @@ public class GuiMain {
 		
 		String[] temp = file.getAbsolutePath().split("\\/|\\\\");
 		String version = temp[temp.length - 1];
-		return new Pair<String, Pair<JPanel, JCheckBoxTree>>(version, new Pair<JPanel, JCheckBoxTree>(panel, tree));
+		return new Tripple<String, JPanel, JCheckBoxTree>(version, panel, tree);
 	}
 	
 	private DefaultMutableTreeNode createTreeForMap(DefaultMutableTreeNode node, HashMap<String, HashMap<String, MinecraftAsset>> map) {

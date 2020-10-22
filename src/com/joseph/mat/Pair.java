@@ -1,6 +1,6 @@
 package com.joseph.mat;
 
-public class Pair<K,V> {
+public class Pair<K, V> {
     private K key;
     private V value;
     
