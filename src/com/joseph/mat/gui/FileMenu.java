@@ -19,7 +19,6 @@ public class FileMenu extends JMenu {
 		this.chooseAssetsDirectory = new JMenuItem("Choose new Asset Directory");
 		this.chooseAssetsDirectory.setToolTipText("Opens a dialog to select a new directory to search");
 		this.chooseAssetsDirectory.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO fill this in
 			}
