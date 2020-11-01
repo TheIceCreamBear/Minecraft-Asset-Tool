@@ -30,5 +30,8 @@ public class HelpMenu extends JMenu {
 				// TODO
 			}
 		});
+		
+		this.add(showHelp);
+		this.add(showAbout);
 	}
 }

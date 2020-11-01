@@ -23,5 +23,7 @@ public class FileMenu extends JMenu {
 				// TODO fill this in
 			}
 		});
+		
+		this.add(chooseAssetsDirectory);
 	}
 }
