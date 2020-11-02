@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,6 +37,10 @@ public class GuiMain {
 	private JButton browseButton;
 	private JTextField saveFolder;
 	private JButton transferButton;
+	
+	private JMenuBar menuBar;
+	private FileMenu file;
+	private HelpMenu help;
 	
 	public GuiMain(LoadingDialog ld, int progress, HashMap<File, HashMap<String, MinecraftAsset>> map) {
 		this.frame = new JFrame("Minecraft Asset Tool");
@@ -109,6 +114,9 @@ public class GuiMain {
 			}
 		});
 		
+		this.initMenus();
+		this.frame.setJMenuBar(menuBar);
+		
 		this.southPanel = new JPanel(new BorderLayout());
 		this.southPanel.add(browseButton, BorderLayout.WEST);
 		this.southPanel.add(saveFolder, BorderLayout.CENTER);
@@ -125,6 +133,16 @@ public class GuiMain {
 		
 		this.frame.setVisible(true);
 		this.frame.pack();
+	}
+	
+	private void initMenus() {
+		this.menuBar = new JMenuBar();
+		
+		this.file = new FileMenu();
+		this.menuBar.add(file);
+		
+		this.help = new HelpMenu();
+		this.menuBar.add(help);
 	}
 	
 	private MinecraftAsset[] getSelectedAssets(JCheckBoxTree tree) {
