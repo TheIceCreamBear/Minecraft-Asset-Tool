@@ -30,12 +30,35 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		File[] indexFiles = new File(Reference.MINECRAFT_ASSETS_INDEX_DIR).listFiles();
-		HashMap<File, HashMap<String, MinecraftAsset>> fileToParseMap = new HashMap<File, HashMap<String, MinecraftAsset>>();
+		File[] indexFiles = getIndexFiles();
 		
 		int maxLoadingProgress = 2 * indexFiles.length + 1;
-		int progress = 0;
 		LoadingDialog ld = new LoadingDialog(maxLoadingProgress);
+		
+		HashMap<File, HashMap<String, MinecraftAsset>> fileToParseMap = generateFileToParseMap(indexFiles, ld);
+		
+		try {
+			final int progresss = indexFiles.length;
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					new GuiMain(ld, progresss, fileToParseMap);
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static File[] getIndexFiles() {
+		return new File(Reference.MINECRAFT_ASSETS_INDEX_DIR).listFiles();
+	}
+	
+	public static HashMap<File, HashMap<String, MinecraftAsset>> generateFileToParseMap(File[] indexFiles, LoadingDialog ld) {
+		HashMap<File, HashMap<String, MinecraftAsset>> fileToParseMap = new HashMap<File, HashMap<String, MinecraftAsset>>();
+		
+		int progress = 0;
+		
 		ld.updateProgressBar(progress, "Parsing index files: 0/" + indexFiles.length);
 		for (int i = 0; i < indexFiles.length; i++, progress++) {
 			File currentFile = indexFiles[i];
@@ -47,17 +70,7 @@ public class Main {
 			}
 		}
 		
-		try {
-			final int progresss = progress;
-			SwingUtilities.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					new GuiMain(ld, progresss, fileToParseMap);
-				}
-			});
-		} catch (InvocationTargetException | InterruptedException e) {
-			e.printStackTrace();
-		}
+		return fileToParseMap;
 	}
 	
 	public static void printAssetMap(HashMap<String, MinecraftAsset> map, boolean useTestString) {
