@@ -42,7 +42,9 @@ public class GuiMain {
 	private FileMenu file;
 	private HelpMenu help;
 	
-	public GuiMain(LoadingDialog ld, int progress, HashMap<File, HashMap<String, MinecraftAsset>> map) {
+	private LoadingDialog ld;
+	
+	public GuiMain() {
 		this.frame = new JFrame("Minecraft Asset Tool");
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setLayout(new BorderLayout());
@@ -50,22 +52,7 @@ public class GuiMain {
 		this.frame.setBounds(d.width / 2 - 400, d.height / 2 - 300, 800, 600);
 		this.frame.setMinimumSize(new Dimension(800, 600));
 
-		this.versionToPanel = new HashMap<String, JPanel>();
-		this.versionToTree = new HashMap<String, JCheckBoxTree>();
-		int i = 0;
-		int size = map.keySet().size();
-		for (File f : map.keySet()) {
-			ld.updateProgressBar(progress++, "Creating GUI panels: " + (i + 1) + "/" + size);
-			Tripple<String, JPanel, JCheckBoxTree> tripple = this.createPanelForAssets(f, map.get(f));
-			this.versionToPanel.put(tripple.getA(), tripple.getB());
-			this.versionToTree.put(tripple.getA(), tripple.getC());
-			i++;
-		}
-		
-		String[] versions = this.versionToPanel.keySet().toArray(new String[this.versionToPanel.keySet().size()]);
-		Arrays.sort(versions);
-		
-		ld.updateProgressBar(progress++, "Creating main GUI");
+		String[] versions = this.generateContent();
 		
 		this.selector = new JComboBox<String>(versions);
 		this.selector.addActionListener(new ActionListener() {
@@ -129,7 +116,8 @@ public class GuiMain {
 		this.frame.add(currentPanel, BorderLayout.CENTER);
 		this.frame.add(southPanel, BorderLayout.SOUTH);
 		
-		ld.closeFrame();
+		this.ld.closeFrame();
+		this.ld = null;
 		
 		this.frame.setVisible(true);
 		this.frame.pack();
@@ -143,6 +131,36 @@ public class GuiMain {
 		
 		this.help = new HelpMenu();
 		this.menuBar.add(help);
+	}
+	
+	protected String[] generateContent() {
+		File[] indexFiles = Main.getIndexFiles();
+		
+		int maxLoadingProgress = 2 * indexFiles.length + 1;
+		ld = new LoadingDialog(maxLoadingProgress);
+		
+		HashMap<File, HashMap<String, MinecraftAsset>> map = Main.generateFileToParseMap(indexFiles, ld);
+		
+		int progress = indexFiles.length;
+		
+		this.versionToPanel = new HashMap<String, JPanel>();
+		this.versionToTree = new HashMap<String, JCheckBoxTree>();
+		int i = 0;
+		int size = map.keySet().size();
+		for (File f : map.keySet()) {
+			ld.updateProgressBar(progress++, "Creating GUI panels: " + (i + 1) + "/" + size);
+			Tripple<String, JPanel, JCheckBoxTree> tripple = this.createPanelForAssets(f, map.get(f));
+			this.versionToPanel.put(tripple.getA(), tripple.getB());
+			this.versionToTree.put(tripple.getA(), tripple.getC());
+			i++;
+		}
+		
+		String[] versions = this.versionToPanel.keySet().toArray(new String[this.versionToPanel.keySet().size()]);
+		Arrays.sort(versions);
+		
+		ld.updateProgressBar(progress++, "Creating main GUI");
+		
+		return versions;
 	}
 	
 	private MinecraftAsset[] getSelectedAssets(JCheckBoxTree tree) {

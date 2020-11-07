@@ -30,19 +30,11 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		File[] indexFiles = getIndexFiles();
-		
-		int maxLoadingProgress = 2 * indexFiles.length + 1;
-		LoadingDialog ld = new LoadingDialog(maxLoadingProgress);
-		
-		HashMap<File, HashMap<String, MinecraftAsset>> fileToParseMap = generateFileToParseMap(indexFiles, ld);
-		
 		try {
-			final int progresss = indexFiles.length;
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					new GuiMain(ld, progresss, fileToParseMap);
+					new GuiMain();
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
