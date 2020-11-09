@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -126,11 +127,20 @@ public class GuiMain {
 	private void initMenus() {
 		this.menuBar = new JMenuBar();
 		
-		this.file = new FileMenu();
+		this.file = new FileMenu(this);
 		this.menuBar.add(file);
 		
 		this.help = new HelpMenu();
 		this.menuBar.add(help);
+	}
+	
+	protected void resetContent() {
+		String[] versions = this.generateContent();
+		
+		this.selector.setModel(new DefaultComboBoxModel<String>(versions));
+		
+		this.ld.closeFrame();
+		this.ld = null;
 	}
 	
 	protected String[] generateContent() {
