@@ -21,7 +21,6 @@ import com.joseph.mat.reference.Reference;
 
 public class Main {
 	public static void main(String[] args) {
-		// TODO make sure this works on Linux distros
 		try {
 			// Make the LaF of Swing the System LaF
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -42,10 +41,23 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Lists the index files that are in the current index directory
+	 * @return
+	 */
 	public static File[] getIndexFiles() {
 		return new File(Reference.MINECRAFT_ASSETS_INDEX_DIR).listFiles();
 	}
 	
+	/**
+	 * Generates a map that maps an index file to another map, which maps each minecraft to its name. This 
+	 * assumes the max progress of ld is at least indexFiles.length, and assumes that no progress has been
+	 * updated to it.
+	 * 
+	 * @param indexFiles - a list of index files, usually gathered from {@link Main#getIndexFiles()}
+	 * @param ld - a loading dialog
+	 * @return a map that maps an index file to the assets it describes
+	 */
 	public static HashMap<File, HashMap<String, MinecraftAsset>> generateFileToParseMap(File[] indexFiles, LoadingDialog ld) {
 		HashMap<File, HashMap<String, MinecraftAsset>> fileToParseMap = new HashMap<File, HashMap<String, MinecraftAsset>>();
 		
@@ -65,6 +77,12 @@ public class Main {
 		return fileToParseMap;
 	}
 	
+	/**
+	 * Prints a given asset map, to the console, used for debugging. if useTestString is true, it will
+	 * use a more verbose toString of MinecraftAsset and it will also print out the size of the largest asset
+	 * @param map - the map to print
+	 * @param useTestString - flag determining if a more verbose string should be used
+	 */
 	public static void printAssetMap(HashMap<String, MinecraftAsset> map, boolean useTestString) {
 		if (useTestString) {
 			MinecraftAsset max = new MinecraftAsset("notmax", "invalid", -1);
@@ -83,6 +101,12 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Converts the given minecraft assets, as defined in the assets array, into their normal file representation,
+	 * and places that file inside the destination dir
+	 * @param assets - the assets to convert
+	 * @param destinationDir - the dir to place the assets in
+	 */
 	public static void convertSelectedMinecraftAssets(MinecraftAsset[] assets, String destinationDir) {
 		LoadingDialog ld = new LoadingDialog(assets.length);
 		
@@ -102,7 +126,6 @@ public class Main {
 				 fileDestinationParent = fileDestinationParent + currentKeyFixed.substring(0, currentKeyFixed.lastIndexOf(File.separatorChar));
 			}
 			String fileDestination = destinationDir + File.separator + currentKeyFixed;
-//			System.out.println(fileSource + ": " + fileDestination);
 			
 			// open the files needed
 			File source = new File(fileSource);

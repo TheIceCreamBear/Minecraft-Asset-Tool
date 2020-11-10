@@ -17,7 +17,6 @@ public class FileMenu extends JMenu {
 	private JMenuItem resetAssetsDirectory;
 	
 	private GuiMain gui;
-	// TODO does this need more
 	
 	public FileMenu(GuiMain gui) {
 		super("File");
