@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.channels.FileChannel;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -110,6 +111,8 @@ public class Main {
 	public static void convertSelectedMinecraftAssets(MinecraftAsset[] assets, String destinationDir) {
 		LoadingDialog ld = new LoadingDialog(assets.length);
 		
+		int count = 0;
+		
 		for (int i = 0; i < assets.length; i++) {
 			// update status
 			ld.updateProgressBar(i, "Processing file " + assets[i].toString() + ": " + i + "/" + assets.length);
@@ -167,6 +170,7 @@ public class Main {
 			{
 				// transfer the contents of the soruce file to the destination file
 				dest.transferFrom(src, 0, current.getSize());
+				count++;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -175,5 +179,6 @@ public class Main {
 		}
 		
 		ld.closeFrame();
+		JOptionPane.showMessageDialog(null, count + "/" + assets.length + " files successfully transfered.");
 	}
 }
