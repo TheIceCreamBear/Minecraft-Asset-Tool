@@ -68,6 +68,10 @@ public class GuiMain {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
+				String currText = GuiMain.this.saveFolder.getText();
+				if (currText != null && !currText.isEmpty()) {
+					chooser.setCurrentDirectory(new File(currText));
+				}
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int result = chooser.showOpenDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
