@@ -262,7 +262,7 @@ public class GuiMain {
 		for (String path : mainSortedKeys) {
 			// if at file
 			if (path.indexOf('.') != -1) {
-				// add the MinecraftAsset asociated with that file
+				// add the MinecraftAsset associated with that file
 				node.add(new DefaultMutableTreeNode(map.get(path).get(path)));
 				continue;
 			}
@@ -284,6 +284,17 @@ public class GuiMain {
 				
 				// if there is no '/' (meaning file)
 				if (item.indexOf('/') == -1) {
+					// special case for when the file does not have a dot
+					if (item.indexOf('.') == -1) {
+						// this was an issue introduced in the 1.17 assets file, where two items in the list
+						// are listed as a hash rather than a regular file. I currently do not know why these
+						// assets are listed like that or are included in the shipped assets
+						
+						// add the MinecraftAsset associated with that file
+						currentNode.add(new DefaultMutableTreeNode(map.get(path).get(item)));
+						continue;	
+					}
+					
 					// save this MinecraftAsset into the map with item being its key at both levels
 					HashMap<String, MinecraftAsset> mip = new HashMap<String, MinecraftAsset>();
 					mip.put(item, current);
