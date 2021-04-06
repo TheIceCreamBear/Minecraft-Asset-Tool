@@ -21,7 +21,13 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-// https://stackoverflow.com/questions/21847411/java-swing-need-a-good-quality-developed-jtree-with-checkboxes
+/**
+ * This code was not written by me. It's author can be found at the linked stack overflow post.
+ * https://stackoverflow.com/questions/21847411/java-swing-need-a-good-quality-developed-jtree-with-checkboxes
+ * Node: while I did not write this, I did modify it to fit my style and preferences.
+ * @author SomethingSomething on StackOverflow
+ *
+ */
 public class JCheckBoxTree extends JTree {
 	private static final long serialVersionUID = -4194122328392241790L;
 	
