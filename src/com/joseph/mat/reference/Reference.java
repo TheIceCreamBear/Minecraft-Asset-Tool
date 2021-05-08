@@ -15,11 +15,8 @@ public class Reference {
 	private static void init() {
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.contains("windows")) {
-			// make sure that user.home points to AppData Roaming on windows
-			if (!System.getProperty("user.home").contains("AppData")) {
-				System.setProperty("user.home", System.getProperty("user.home") + File.separator + "AppData" + File.separator + "Roaming");
-			}
-			MINECRAFT_ROOT_DIR = System.getProperty("user.home") + File.separator + ".minecraft";
+			// get system appdata folder as default location for .minecraft
+			MINECRAFT_ROOT_DIR = System.getenv("APPDATA") + File.separator + ".minecraft";
 		} else if (os.contains("mac")) {
 			// fix location on mac
 			MINECRAFT_ROOT_DIR = System.getProperty("user.home") + File.separator + "Library" + File.separator + "Application Support" + File.separator + "Minecraft";
